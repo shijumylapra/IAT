@@ -1,1 +1,16 @@
-<p>body works!</p>
+<div id="canvas">
+    <div class="toolbar">
+      <span style="color:red;" *ngIf="message">{{message}}</span>
+      <input #file type="file" accept='image/*' (change)="preview(file.files)" />
+       
+    </div>   
+    <div class='bounding-box'>
+      <img [src]="imgURL" height="450" *ngIf="imgURL">
+    </div>
+    <div class="bottom_bar">
+     <!--  <input id="jsn" type="button"  (click)="Clicked('json');" value="JSON Output" onclick="label_image_region(this.value);" />  -->
+     <input id="jsn" type="button" value="JSON Output" onclick="label_image_region(this.value);" /> 
+
+     </div>
+  </div>   
+

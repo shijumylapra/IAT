@@ -1,0 +1,30 @@
+.footer {
+    background-color: lightslategrey;
+    overflow: hidden;
+  }
+  
+/* Style the links inside the navigation bar */
+.footer a {
+float: left;
+display: block;
+color:darkslateblue;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+font-size: 17px;
+}
+
+#can {
+    position: absolute;
+    width: 500px;
+    height: 400px;
+    z-index: 15;
+    top: 44%;
+    left: 12%;
+    margin: -100px 0 0 -150px;
+    background:darkgoldenrod;
+  }
+  #btn
+  {
+    float: right;
+  }
