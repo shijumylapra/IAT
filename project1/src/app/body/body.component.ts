@@ -12,9 +12,22 @@ import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
   <style>
    canvas { border: 1px solid #000; }
   </style>
+
+  <div class="toolbar">
+  <ul class="donate-now">
+    <li>
+      <input type="radio" id="a25" name="amount" />
+      <label for="a25">Intersting</label>
+    </li>
+    <li>
+      <input type="radio" id="a50" name="amount" />
+      <label for="a50">Unintersting</label>
+    </li>
+  </ul>
   <div>
   <input #file type="file" accept='image/*' (change)="preview(file.files)" />
   </div>
+</div>
     <div id="can">
       <canvas #canvas> </canvas>
       
@@ -37,13 +50,13 @@ export class BodyComponent implements OnInit {
   public imagePath;
   public imgURL: any;
   public message: string;
-  rect: any = {};
-  drag: any = false;
+ 
   _via_img_metadata = {};
   imageBitmap = new Image();
   @ViewChild('canvas') public canvas: ElementRef;
   @Input() public width = 500;
   @Input() public height = 400;
+  private booly:boolean; 
   
   private cx: CanvasRenderingContext2D; 
   
@@ -61,19 +74,25 @@ export class BodyComponent implements OnInit {
   reader.onload = (_event) => { 
   this.imgURL = reader.result; 
   this.loadCanvas();
-  alert("sss");
+  
+ 
   }
 }
 loadCanvas = function ()
 {
-   const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+  
+  const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
   this.cx = canvasEl.getContext('2d');
+  
   canvasEl.width = this.width;
   canvasEl.height = this.height;
+  this.cx.clearRect(0, 0, canvasEl.width, canvasEl.height);
   let image = new Image();
   image.src = this.imgURL;
+
   image.addEventListener('load', e => {
     this.cx.drawImage(image, 0, 0,  canvasEl.width,canvasEl.height);
+  
   });
   this.cx.lineWidth = 3;
   this.cx.lineCap = 'round';
@@ -83,6 +102,8 @@ loadCanvas = function ()
 
 private captureEvents(canvasEl: HTMLCanvasElement) {
   // this will capture all mousedown events from the canvas element
+  this.booly=true;
+  
   fromEvent(canvasEl, 'mousedown')
     .pipe(
       switchMap((e) => {
@@ -130,10 +151,14 @@ private drawOnCanvas(prevPos: { x: number, y: number }, currentPos: { x: number,
 
 download_all_region()
  {
+   if(this.booly==true)
+   {
   var all_region_data = this.pack_via_metadata();
   var blob_attr = {type: 'text/'+'json'+';charset=utf-8'};
   var all_region_data_blob = new Blob(all_region_data, blob_attr);
   this.save_data_to_local_file(all_region_data_blob, 'iat.'+'json');
+  this.booly=false;
+   }
 }
 
  save_data_to_local_file(data, filename) {
