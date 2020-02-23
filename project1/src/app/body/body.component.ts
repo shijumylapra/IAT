@@ -17,9 +17,9 @@ import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
   </div>
     <div id="can">
       <canvas #canvas> </canvas>
-      <img #spaceship [src]="imgURL" height="450" *ngIf="imgURL">
+      
       <div class="footer">
-      <input id="btn" type="button" value="JSON Output"  (click)="download_all_region_data()" /> 
+      <input id="btn" type="button" value="JSON Output"  (click)="download_all_region()" /> 
  
       <span style="color:red;" *ngIf="message">{{message}}</span>
       </div>
@@ -44,6 +44,7 @@ export class BodyComponent implements OnInit {
   @ViewChild('canvas') public canvas: ElementRef;
   @Input() public width = 500;
   @Input() public height = 400;
+  
   private cx: CanvasRenderingContext2D; 
   
   preview(files) {
@@ -60,12 +61,9 @@ export class BodyComponent implements OnInit {
   reader.onload = (_event) => { 
   this.imgURL = reader.result; 
   this.loadCanvas();
- 
+  alert("sss");
   }
 }
-
-
-
 loadCanvas = function ()
 {
    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
@@ -130,7 +128,7 @@ private drawOnCanvas(prevPos: { x: number, y: number }, currentPos: { x: number,
   }
 }
 
- download_all_region_data() 
+download_all_region()
  {
   var all_region_data = this.pack_via_metadata();
   var blob_attr = {type: 'text/'+'json'+';charset=utf-8'};
