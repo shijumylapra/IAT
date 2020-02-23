@@ -1,5 +1,5 @@
 import {
-  Component, Input, ElementRef, AfterViewInit, ViewChild
+  Component, Input, ElementRef, AfterViewInit, ViewChild,OnInit
 } from '@angular/core';
 
 import { fromEvent } from 'rxjs';
@@ -20,7 +20,7 @@ import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
       <img #spaceship [src]="imgURL" height="450" *ngIf="imgURL">
       <div class="footer">
       <input id="btn" type="button" value="JSON Output"  (click)="download_all_region_data()" /> 
-    
+ 
       <span style="color:red;" *ngIf="message">{{message}}</span>
       </div>
     </div>
@@ -28,7 +28,7 @@ import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
   `
 })
 
-export class BodyComponent implements AfterViewInit {
+export class BodyComponent implements OnInit {
 
   constructor() { }
 
@@ -40,44 +40,48 @@ export class BodyComponent implements AfterViewInit {
   rect: any = {};
   drag: any = false;
   _via_img_metadata = {};
+  imageBitmap = new Image();
+  @ViewChild('canvas') public canvas: ElementRef;
+  @Input() public width = 500;
+  @Input() public height = 400;
+  private cx: CanvasRenderingContext2D; 
   
   preview(files) {
   if (files.length === 0)
     return;
-
-  var mimeType = files[0].type;
+ var mimeType = files[0].type;
   if (mimeType.match(/image\/*/) == null) {
     this.message = "Only images are supported.";
     return;
   }
-
   var reader = new FileReader();
   this.imagePath = files;
   reader.readAsDataURL(files[0]); 
   reader.onload = (_event) => { 
   this.imgURL = reader.result; 
+  this.loadCanvas();
+ 
   }
 }
 
 
-@ViewChild('canvas') public canvas: ElementRef;
 
-@Input() public width = 500;
-@Input() public height = 400;
-
-private cx: CanvasRenderingContext2D; 
-
-public ngAfterViewInit()
+loadCanvas = function ()
 {
-  const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
+   const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
   this.cx = canvasEl.getContext('2d');
   canvasEl.width = this.width;
   canvasEl.height = this.height;
+  let image = new Image();
+  image.src = this.imgURL;
+  image.addEventListener('load', e => {
+    this.cx.drawImage(image, 0, 0,  canvasEl.width,canvasEl.height);
+  });
   this.cx.lineWidth = 3;
   this.cx.lineCap = 'round';
   this.cx.strokeStyle = '#000';
   this.captureEvents(canvasEl);
-} 
+ } 
 
 private captureEvents(canvasEl: HTMLCanvasElement) {
   // this will capture all mousedown events from the canvas element
