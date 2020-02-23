@@ -1,9 +1,12 @@
+
 <div id="canvas">
     <div class="toolbar">
       <span style="color:red;" *ngIf="message">{{message}}</span>
       <input #file type="file" accept='image/*' (change)="preview(file.files)" />
-       
-    </div>   
+    </div>  
+
+    
+  
     <div class='bounding-box'>
       <img [src]="imgURL" height="450" *ngIf="imgURL">
     </div>

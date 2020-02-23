@@ -28,12 +28,13 @@ import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
   <input #file type="file" accept='image/*' (change)="preview(file.files)" />
   </div>
 </div>
+<div class="topnav">
+  <a  class="active">Upload image into canvas.... </a>
+</div>
     <div id="can">
       <canvas #canvas> </canvas>
-      
       <div class="footer">
       <input id="btn" type="button" value="JSON Output"  (click)="download_all_region()" /> 
- 
       <span style="color:red;" *ngIf="message">{{message}}</span>
       </div>
     </div>
